@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+
+<head>
+  <title></title>
+  <style>
+    body {
+      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+      font-size: 75%;
+      margin: 0;
+    }
+
+    input[type=button]{
+      outline: none;
+    }
+
+    input[type=button]:active{
+      outline: none;
+    }
+    
+    .cookiedel {
+      width: 300px;
+      overflow: hidden;
+    }
+    
+    .cookiedel__content {
+      padding: 0 10px;
+    }
+    
+    .cookiedel__frm--group {
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    
+    .cookiedel__txt {
+      white-space: pre;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      float: left;
+      width: 220px;
+      display: block;
+      box-sizing: border-box;
+      border: none;
+      color: #000;
+    }
+    
+    .cookiedel__sbmt {
+      float: right;
+      width: 60px;
+      text-align: center;
+    }
+    
+    .cookiedel__hstry {
+      margin-top: 10px;
+      border-top: solid 1px #000;
+    }
+    
+    .cookiedel__sttngs {
+      background-color: #eee;
+      padding: 5px 10px;
+    }
+    
+    .cookiedel__sttngs--btn {
+      background: url('icon-settings.png') no-repeat center center;
+      border: none;
+      width: 16px;
+      background-size: 15px 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cookiedel">
+
+    <div class="cookiedel__content">
+      <div class="cookiedel__frm">
+        <div class="cookiedel__frm--group">
+          <input type="text" disabled="disabled" id="curr_domain" class="cookiedel__txt cookiedel__txt--dflt" />
+          <input id="curr_domain_submit" class="cookiedel__sbmt cookiedel__sbmt--dflt" type="button" value="">
+        </div>
+      </div>
+      <div id="history" class="cookiedel__hstry"></div>
+    </div>
+    <div class="cookiedel__sttngs">
+      <input type="button" value="" class="cookiedel__sttngs--btn" id="settings_btn" />
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+
+</html>
