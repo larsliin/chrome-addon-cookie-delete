@@ -32,8 +32,7 @@ function removeCookies() {
     var tmpURL = previousUrl;
     var previousDomain = tmpURL ? stripWWW(tmpURL.hostname) : '';
     var currentDomain = stripWWW(currentUrl.hostname);
-
-
+    
     chrome.storage.sync.get('whitelist', function (result) {
       console.log('');
       console.log(previousDomain + ' is whitelisted: ' + getIsCurrentDomainWhitelisted(result, previousDomain));

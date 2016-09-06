@@ -1,10 +1,12 @@
 var tmpHistoryDomainObj = {};
 var deleteCookiesStr = 'Remove';
 var keepCookiesStr = 'Add';
+var cookiedelElem = document.getElementById('cookiedel');
 var domainElem = document.getElementById('curr_domain');
 var submitElem = document.getElementById('curr_domain_submit');
 var historyElem = document.getElementById('history');
 var settingsBtn = document.getElementById('settings_btn');
+var trashBtn = document.getElementById('trash_btn');
 var historyLength = 5;
 var isWhitelisted = false;
 
@@ -38,7 +40,11 @@ chrome.tabs.getSelected(null, function (tab) {
 
 settingsBtn.addEventListener('click', function (e) {
     console.log('open settings');
-})
+});
+
+trashBtn.addEventListener('click', function (e) {
+    clearHistory();
+});
 
 function addDefaultClickHandler() {
     submitElem.addEventListener('click', onDefaultClick);
@@ -52,76 +58,133 @@ function addHistoryClickHandler() {
 }
 
 function onDefaultClick(e) {
-    if (isWhitelisted) {
-        removeFromStorage(currentDomain);
+    var id = stripDot(currentDomain);
 
-        document.getElementById('hstr_sbmt_' + currentDomain.replace('.', '_')).value = keepCookiesStr;
-    } else {
+    if (!isWhitelisted) {
+        // add current domain to whitelist
         addToStorage(currentDomain);
 
-        if (!document.getElementById('_hstr_sbmt_' +currentDomain.replace('.', '_'))) {
-            addDomainToHistory(currentDomain);
-        }else{
-            document.getElementById('hstr_sbmt_' + currentDomain.replace('.', '_')).value = deleteCookiesStr;
+        // add class to wrapper if history length is 1 or more
+        if (!hasClass(cookiedelElem, 'cookiedel__hstry--active')) {
+            cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstry--active' : 'cookiedel__hstry--active';
         }
+
+        if (!tmpHistoryDomainObj[id]) {
+            addDomainToHistory(currentDomain);
+        } else {
+            tmpHistoryDomainObj[id].button.value = deleteCookiesStr;
+            tmpHistoryDomainObj[id].added = true;
+        }
+
+        isWhitelisted = true;
+        submitElem.value = deleteCookiesStr;
+    } else {
+        // remove current domain from whitelist
+        removeFromStorage(currentDomain);
+
+        isWhitelisted = false;
+        submitElem.value = keepCookiesStr;
+
+        if (!tmpHistoryDomainObj[id]) {
+            addDomainToHistory(currentDomain);
+
+        }
+        tmpHistoryDomainObj[id].button.value = keepCookiesStr;
+        tmpHistoryDomainObj[id].button.added = false;
     }
 }
 
+// on history buttons click (add/remove domain from whitelist)
 function onHistoryClick(e) {
     var domain = e.target.previousSibling.value;
-    var domainKey = stripWWW(domain);
-    tmpHistoryDomainObj[domainKey] = true;
-    console.log(tmpHistoryDomainObj);
-    removeFromStorage(domain);
+    var domainKey = stripDot(domain);
+
+    if (tmpHistoryDomainObj[domainKey].added) {
+        removeFromStorage(domain);
+
+        e.target.value = keepCookiesStr;
+
+        if (domain == currentDomain) {
+            submitElem.value = keepCookiesStr;
+            isWhitelisted = false;
+        }
+
+        tmpHistoryDomainObj[domainKey].added = false;
+
+    } else {
+        addToStorage(domain);
+
+        e.target.value = deleteCookiesStr;
+
+        if (domain == currentDomain) {
+            submitElem.value = deleteCookiesStr;
+            isWhitelisted = true;
+        }
+
+        tmpHistoryDomainObj[domainKey].added = true;
+    }
 }
 
+// add domain to whitelist
 function addDomainToHistory(domain) {
     var div = document.createElement('div');
+    var id = stripDot(domain);
 
-    if (historyElem.childNodes.length > historyLength - 1) {
-        historyElem.removeChild(historyElem.lastChild);
+    if (!document.getElementById('hstr_' + stripDot(currentDomain))) {
+        if (historyElem.childNodes.length > historyLength - 1) {
+            historyElem.removeChild(historyElem.lastChild);
+        }
+
+        div.className = 'cookiedel__frm--group';
+        div.id = 'hstr_' + id;
+        div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" value="' + domain + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + id + '" type="button" value="' + deleteCookiesStr + '">';
+
+        historyElem.insertBefore(div, historyElem.firstChild);
+
+        tmpHistoryDomainObj[id] = { added: true, button: document.getElementById('hstr_sbmt_' + id), text: document.getElementById('hstr_txt_' + id) };
+
+        addHistoryClickHandler();
     }
-
-    div.className = 'cookiedel__frm--group';
-    div.id = 'hstr_' + domain.replace('.', '_');
-    div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" value="' + domain + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + domain.replace('.', '_') + '" type="button" value="' + deleteCookiesStr + '">';
-
-    historyElem.insertBefore(div, historyElem.firstChild);
-
-    addHistoryClickHandler();
 }
 
+// clear history
 function clearHistory() {
     while (historyElem.hasChildNodes()) {
         historyElem.removeChild(historyElem.lastChild);
     }
+
+    chrome.storage.sync.set({ 'whitelist': [] }, function (result) { });
+
+    tmpHistoryDomainObj = {};
+
+    removeClass(cookiedelElem, 'cookiedel__hstry--active');
 }
 
 function renderHistoryList() {
-    console.log('renderHistoryList');
     chrome.storage.sync.get('whitelist', function (result) {
         var c = 0;
-        for (var i = result.whitelist.length - 1; i > 0; i--) {
+        for (var i = result.whitelist.length - 1; i >= 0; i--) {
             if (c < historyLength) {
                 var div = document.createElement('div');
+                var id = stripDot(result.whitelist[i]);
                 div.className = 'cookiedel__frm--group';
-                div.id = 'hstr_' + result.whitelist[i].replace('.', '_');
-                div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" value="' + result.whitelist[i] + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + result.whitelist[i].replace('.', '_') + '" type="button" value="' + deleteCookiesStr + '">';
-
+                div.id = 'hstr_' + id;
+                div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" id="hstr_txt_' + id + '" value="' + result.whitelist[i] + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + id + '" type="button" value="' + deleteCookiesStr + '">';
                 historyElem.appendChild(div);
 
+                tmpHistoryDomainObj[id] = { added: true, button: document.getElementById('hstr_sbmt_' + id), text: document.getElementById('hstr_txt_' + id) }
                 c++;
             }
+        }
 
-            console.log(result.whitelist[i])
+        console.log(tmpHistoryDomainObj);
+
+        if (result.whitelist.length > 0) {
+            cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstry--active' : 'cookiedel__hstry--active';
         }
 
         addHistoryClickHandler();
     });
-}
-
-function stripWWW(str) {
-    return str.replace('www.', '')
 }
 
 function addToStorage(domain) {
@@ -129,10 +192,7 @@ function addToStorage(domain) {
         var arr = result.whitelist;
         arr.push(domain);
 
-        chrome.storage.sync.set({ 'whitelist': arr }, function (result) {
-            submitElem.value = deleteCookiesStr;
-            isWhitelisted = true;
-        });
+        chrome.storage.sync.set({ 'whitelist': arr }, function (result) { });
     });
 }
 
@@ -144,9 +204,28 @@ function removeFromStorage(domain) {
             arr.splice(index, 1);
         }
 
-        chrome.storage.sync.set({ 'whitelist': arr }, function (result) {
-            submitElem.value = keepCookiesStr;
-            isWhitelisted = false;
-        });
+        chrome.storage.sync.set({ 'whitelist': arr }, function (result) { });
     });
+}
+
+function hasClass(element, cls) {
+    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+}
+
+function removeClass(el, name) {
+    var regex = new RegExp('(^|\\s)' + name + '(\\s|$)', 'gi');
+    var newClassName = el.className.replace(regex, ' ');
+    el.className = trimStr(newClassName);
+}
+
+function trimStr(str) {
+    return str.replace(/^\s+|\s+$/g, '');
+}
+
+function stripWWW(str) {
+    return str.replace('www.', '')
+}
+
+function stripDot(str) {
+    return str.replace('.', '')
 }
