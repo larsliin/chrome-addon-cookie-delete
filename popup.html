@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-      font-size: 75%;
+      font-size: 12px;
       margin: 0;
     }
     
@@ -19,12 +19,16 @@
     }
     
     .cookiedel {
-      width: 300px;
+      width: 250px;
       overflow: hidden;
     }
     
     .cookiedel__content {
       padding: 0 10px;
+    }
+    
+    .cookiedel__header {
+      margin-bottom: 16px;
     }
     
     .cookiedel__frm--group {
@@ -37,7 +41,7 @@
       text-overflow: ellipsis;
       overflow: hidden;
       float: left;
-      width: 220px;
+      width: 170px;
       display: block;
       box-sizing: border-box;
       border: none;
@@ -50,21 +54,24 @@
       text-align: center;
     }
     
-    .cookiedel__hstry--active .cookiedel__divider {
-      display: block;
-    }
-    
-    .cookiedel__divider {
+    hr {
       background-color: #ccc;
       border-top: none;
       height: 1px;
       border-bottom: solid 1px #eee;
       border-left: none;
       border-right: none;
+    }
+    
+    .cookiedel__hstr--active .cookiedel__hstr {
+      display: block;
+    }
+    
+    .cookiedel__hstr {
       display: none;
     }
     
-    .cookiedel__hstry {
+    .cookiedel__hstr {
       margin-top: 10px;
     }
     
@@ -74,7 +81,7 @@
       overflow: hidden;
     }
     
-    .cookiedel__tool{
+    .cookiedel__tool {
       border: none;
       width: 16px;
       background-size: 15px 15px;
@@ -82,14 +89,13 @@
       background-position: center center;
       background-color: transparent;
     }
-
+    
     .cookiedel__sttngs--btn {
       background-image: url('icon-settings.png');
       float: left;
     }
-
     
-    .cookiedel__trash--btn{
+    .cookiedel__trash--btn {
       background-image: url('icon-waste-bin.png');
       float: right;
     }
@@ -101,12 +107,19 @@
     <div class="cookiedel__content">
       <div class="cookiedel__frm">
         <div class="cookiedel__frm--group">
-          <input type="text" disabled="disabled" id="curr_domain" class="cookiedel__txt cookiedel__txt--dflt" />
-          <input id="curr_domain_submit" class="cookiedel__sbmt cookiedel__sbmt--dflt" type="button" value="">
+          <div class="cookiedel__header">
+            <span>Add domain to whitelist</span>
+          </div>
+          <div>
+            <input type="text" disabled="disabled" id="curr_domain" class="cookiedel__txt cookiedel__txt--dflt" />
+            <input id="curr_domain_submit" class="cookiedel__sbmt cookiedel__sbmt--dflt" type="button" value="">
+          </div>
         </div>
       </div>
-      <hr class="cookiedel__divider" />
-      <div id="history" class="cookiedel__hstry"></div>
+      <div class="cookiedel__hstr">
+        <hr class="cookiedel__divider" />
+        <div id="history_list" class="cookiedel__hstr-list"></div>
+      </div>
     </div>
     <div class="cookiedel__sttngs">
       <input type="button" value="" class="cookiedel__tool cookiedel__sttngs--btn" id="settings_btn" />

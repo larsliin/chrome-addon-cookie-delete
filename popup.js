@@ -4,7 +4,7 @@ var keepCookiesStr = 'Add';
 var cookiedelElem = document.getElementById('cookiedel');
 var domainElem = document.getElementById('curr_domain');
 var submitElem = document.getElementById('curr_domain_submit');
-var historyElem = document.getElementById('history');
+var historyElem = document.getElementById('history_list');
 var settingsBtn = document.getElementById('settings_btn');
 var trashBtn = document.getElementById('trash_btn');
 var historyLength = 5;
@@ -39,7 +39,13 @@ chrome.tabs.getSelected(null, function (tab) {
 });
 
 settingsBtn.addEventListener('click', function (e) {
-    console.log('open settings');
+    if (chrome.runtime.openOptionsPage) {
+        // New way to open options pages, if supported (Chrome 42+).
+        chrome.runtime.openOptionsPage();
+    } else {
+        // Reasonable fallback.
+        window.open(chrome.runtime.getURL('options.html'));
+    }
 });
 
 trashBtn.addEventListener('click', function (e) {
@@ -65,8 +71,8 @@ function onDefaultClick(e) {
         addToStorage(currentDomain);
 
         // add class to wrapper if history length is 1 or more
-        if (!hasClass(cookiedelElem, 'cookiedel__hstry--active')) {
-            cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstry--active' : 'cookiedel__hstry--active';
+        if (!hasClass(cookiedelElem, 'cookiedel__hstr--active')) {
+            cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstr--active' : 'cookiedel__hstr--active';
         }
 
         if (!tmpHistoryDomainObj[id]) {
@@ -75,6 +81,8 @@ function onDefaultClick(e) {
             tmpHistoryDomainObj[id].button.value = deleteCookiesStr;
             tmpHistoryDomainObj[id].added = true;
         }
+
+        notify('Domain added', 'Cookies will be deleted when navigating to other domain.');
 
         isWhitelisted = true;
         submitElem.value = deleteCookiesStr;
@@ -157,9 +165,14 @@ function clearHistory() {
 
     tmpHistoryDomainObj = {};
 
-    removeClass(cookiedelElem, 'cookiedel__hstry--active');
+    removeClass(cookiedelElem, 'cookiedel__hstr--active');
+
+    isWhitelisted = false;
+
+    submitElem.value = keepCookiesStr;
 }
 
+// render whitelisted domain history
 function renderHistoryList() {
     chrome.storage.sync.get('whitelist', function (result) {
         var c = 0;
@@ -180,7 +193,7 @@ function renderHistoryList() {
         console.log(tmpHistoryDomainObj);
 
         if (result.whitelist.length > 0) {
-            cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstry--active' : 'cookiedel__hstry--active';
+            cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstr--active' : 'cookiedel__hstr--active';
         }
 
         addHistoryClickHandler();
@@ -208,6 +221,19 @@ function removeFromStorage(domain) {
     });
 }
 
+function notify(title, body) {
+    chrome.notifications.create('notification.warning', {
+        iconUrl: ('icon-notification-48.png'),
+        title: title,
+        message: body,
+        type: 'basic',
+        //buttons: [{ title: 'Learn More' }],
+        isClickable: true,
+        priority: 0,
+    }, function () { });
+}
+
+// helpers
 function hasClass(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
