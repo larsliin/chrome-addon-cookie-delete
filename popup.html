@@ -3,111 +3,10 @@
 
 <head>
   <title></title>
-  <style>
-    body {
-      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-      font-size: 12px;
-      margin: 0;
-    }
-    
-    input[type=button] {
-      outline: none;
-    }
-    
-    input[type=button]:active {
-      outline: none;
-    }
-    
-    .cookiedel {
-      width: 250px;
-      overflow: hidden;
-    }
-    
-    .cookiedel__content {
-      padding: 0 10px;
-    }
-    
-    .cookiedel__header {
-      margin-bottom: 16px;
-    }
-    
-    .cookiedel__frm--group {
-      overflow: hidden;
-      margin: 10px 0;
-    }
-    
-    .cookiedel__txt {
-      white-space: pre;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      float: left;
-      width: 170px;
-      display: block;
-      box-sizing: border-box;
-      border: none;
-      color: #000;
-      background-color: transparent;
-      font-size: 12px;
-      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-    }
-    
-    .cookiedel__sbmt {
-      float: right;
-      width: 60px;
-      text-align: center;
-      font-size: 12px;
-      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-    }
-    
-    hr {
-      background-color: #ccc;
-      border-top: none;
-      height: 1px;
-      border-bottom: solid 1px #eee;
-      border-left: none;
-      border-right: none;
-    }
-    
-    .cookiedel__hstr--active .cookiedel__hstr {
-      display: block;
-    }
-    
-    .cookiedel__hstr {
-      display: none;
-    }
-    
-    .cookiedel__hstr {
-      margin-top: 10px;
-    }
-    
-    .cookiedel__sttngs {
-      background-color: #eee;
-      padding: 5px 10px;
-      overflow: hidden;
-    }
-    
-    .cookiedel__tool {
-      border: none;
-      width: 16px;
-      background-size: 15px 15px;
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-color: transparent;
-    }
-    
-    .cookiedel__sttngs--btn {
-      background-image: url('images/icon-settings.png');
-      float: left;
-    }
-    
-    .cookiedel__trash--btn {
-      background-image: url('images/icon-waste-bin.png');
-      float: right;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 
-<body>
+<body class="cookiedel__body">
   <div class="cookiedel" id="cookiedel">
     <div class="cookiedel__content">
       <div class="cookiedel__frm">
@@ -121,14 +20,15 @@
           </div>
         </div>
       </div>
-      <div class="cookiedel__hstr">
+      <div class="cookiedel__hstr hidden">
         <hr class="cookiedel__divider" />
         <div id="history_list" class="cookiedel__hstr-list"></div>
       </div>
     </div>
     <div class="cookiedel__sttngs">
       <input type="button" value="" class="cookiedel__tool cookiedel__sttngs--btn" id="settings_btn" />
-      <input type="button" value="" class="cookiedel__tool cookiedel__trash--btn" id="trash_btn" />
+      <input type="button" value="" class="cookiedel__tool cookiedel__trash--btn" id="remove_all_btn" />
+      <input type="button" value="" class="cookiedel__tool cookiedel__clr--btn" id="clr_btn" />
     </div>
   </div>
   <script src="js/popup.js"></script>

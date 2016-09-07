@@ -1,0 +1,111 @@
+body {
+  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+  font-size: 12px;
+}
+
+.cookiedel__body {
+  margin: 0;
+}
+
+input[type=button] {
+  outline: none;
+}
+
+input[type=button]:active {
+  outline: none;
+}
+
+.cookiedel {
+  width: 250px;
+  overflow: hidden;
+}
+
+.cookiedel__content {
+  padding: 0 10px;
+}
+
+.cookiedel__header {
+  margin-bottom: 16px;
+}
+
+.cookiedel__frm--group {
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+input[type="text"].cookiedel__txt {
+  white-space: pre;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  float: left;
+  width: 170px;
+  display: block;
+  box-sizing: border-box;
+  border: none;
+  color: #000;
+  background-color: transparent;
+  font-size: 12px;
+  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+}
+
+.cookiedel__sbmt {
+  float: right;
+  width: 60px;
+  text-align: center;
+  font-size: 12px;
+  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+}
+
+hr {
+  background-color: #ccc;
+  border-top: none;
+  height: 1px;
+  border-bottom: solid 1px #eee;
+  border-left: none;
+  border-right: none;
+}
+
+.cookiedel__hstr--active .cookiedel__hstr {
+  display: block;
+}
+
+.cookiedel__hstr {}
+
+.cookiedel__hstr {
+  margin-top: 10px;
+}
+
+.cookiedel__sttngs {
+  background-color: #eee;
+  padding: 5px 10px;
+  overflow: hidden;
+}
+
+.cookiedel__tool {
+  border: none;
+  width: 16px;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: transparent;
+}
+
+.cookiedel__sttngs--btn {
+  background-image: url('/images/icon-settings.png');
+  float: left;
+}
+
+.cookiedel__trash--btn {
+  background-image: url('/images/icon-waste-bin.png');
+  float: right;
+  margin-left: 10px;
+}
+
+.cookiedel__clr--btn {
+  background-image: url('/images/icon-empty-list.png');
+  float: right;
+}
+
+.hidden {
+  display: none;
+}

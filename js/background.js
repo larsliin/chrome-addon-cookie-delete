@@ -1,18 +1,20 @@
 var currentDomain, previousUrl, currentTabId;
+chrome.webNavigation.onDOMContentLoaded.addListener(function (e) {
+  if (e.frameId == 0) {
+    chrome.tabs.getSelected(null, function (tab) {
+      var currentUrl = new URL(tab.url);
+      var previousDomain = previousUrl ? (previousUrl.hostname).replace('www.', '') : '';
 
-chrome.history.onVisited.addListener(function (e){
-  console.log('browser history updated', e);
+      currentDomain = (currentUrl.hostname).replace('www.', '');
+
+      if (previousDomain != currentDomain) {
+        removeCookies();
+      }
+    });
+  }
 });
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  var currentUrl = new URL(tab.url);
-  var previousDomain = previousUrl ? (previousUrl.hostname).replace('www.', '') : '';
-
-  currentDomain = (currentUrl.hostname).replace('www.', '');
-  
-  if (changeInfo.status == 'loading' && previousDomain != currentDomain) {
-    removeCookies();
-  }
+chrome.webNavigation.onErrorOccurred.addListener(function (e) {
 });
 
 chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
@@ -30,7 +32,8 @@ chrome.tabs.onRemoved.addListener(function (e) {
 });
 
 function removeCookies() {
-  //console.log('remove cookies');
+  
+
   chrome.tabs.getSelected(null, function (tab) {
     var currentUrl = new URL(tab.url);
     var tmpURL = previousUrl;
@@ -46,9 +49,7 @@ function removeCookies() {
             var c = 0;
 
             for (var i = 0; i < cookies.length; i++) {
-
               chrome.cookies.remove({ url: tmpURL.origin + cookies[i].path, name: cookies[i].name }, function (e) {
-
                 if (c == (cookies.length - 1)) {
                   chrome.cookies.getAll({ domain: previousDomain }, function (cookies2) {
                     notify('Cookies deleted', cookies.length + ' cookies deleted from ' + previousDomain);
@@ -94,3 +95,13 @@ function notify(title, body) {
 function stripWWW(str) {
   return str.replace('www.', '')
 }
+
+chrome.notifications.onButtonClicked.addListener(function () {
+  if (chrome.runtime.openOptionsPage) {
+    // New way to open options pages, if supported (Chrome 42+).
+    chrome.runtime.openOptionsPage();
+  } else {
+    // Reasonable fallback.
+    window.open(chrome.runtime.getURL('options.html'));
+  }
+});

@@ -6,7 +6,8 @@ var domainElem = document.getElementById('curr_domain');
 var submitElem = document.getElementById('curr_domain_submit');
 var historyElem = document.getElementById('history_list');
 var settingsBtn = document.getElementById('settings_btn');
-var trashBtn = document.getElementById('trash_btn');
+var removeAllCookiesBtn = document.getElementById('remove_all_btn');
+var clearListBtn = document.getElementById('clr_btn');
 var historyLength = 5;
 var isWhitelisted = false;
 
@@ -48,8 +49,12 @@ settingsBtn.addEventListener('click', function (e) {
     }
 });
 
-trashBtn.addEventListener('click', function (e) {
+clearListBtn.addEventListener('click', function (e) {
     clearHistory();
+});
+
+removeAllCookiesBtn.addEventListener('click', function (e) {
+    
 });
 
 function addDefaultClickHandler() {
@@ -254,4 +259,17 @@ function stripWWW(str) {
 
 function stripDot(str) {
     return str.replace('.', '')
+}
+
+deleteAllNotWhitelistedCookies();
+
+
+function deleteAllNotWhitelistedCookies() {
+  chrome.cookies.getAll({  }, function (cookies) {
+    console.log(cookies);
+  });
+
+  chrome.storage.sync.get('whitelist', function (result) {
+    var arr = result.whitelist;
+  });
 }

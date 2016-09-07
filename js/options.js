@@ -8,7 +8,7 @@ chrome.storage.sync.get('whitelist', function (result) {
         var id = stripDot(result.whitelist[i]);
         div.className = 'cookiedel__frm--group';
         div.id = 'hstr_' + id;
-        div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" id="hstr_txt_' + id + '" value="' + result.whitelist[i] + '" />';
+        div.innerHTML = '<div>' + result.whitelist[i] + '</div>';
         historyElem.appendChild(div);
 
     }

@@ -12,11 +12,11 @@
     // and will be unsupported in a future version of Chrome (TBD).
     "open_in_tab": true
   },
-  "web_accessible_resources": ["images/icon-settings.png", "images/icon-waste-bin.png"],
-  "permissions": ["cookies", "storage", "tabs", "notifications", "history","webNavigation", "*://*/*"],
+  "web_accessible_resources": ["images/icon-settings.png", "images/icon-waste-bin.png", "images/icon-empty-list.png"],
+  "permissions": ["cookies", "storage", "tabs", "notifications", "history","webNavigation", "*://*/*", "<all_urls>"],
   "background": {
     "scripts": ["js/background.js"],
-    "persistent": false
+    "persistent": true
   },
   "browser_action": {
     "default_icon" : "images/icon.png",
