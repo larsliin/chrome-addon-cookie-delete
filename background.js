@@ -1,11 +1,8 @@
 var currentDomain, previousUrl, currentTabId;
 
-chrome.webNavigation.onCommitted.addListener(function (e) {
-  console.log(e);
-  if(e.frameId == 0){
-    console.log('navigate');
-  }
-})
+chrome.history.onVisited.addListener(function (e){
+  console.log('browser history updated', e);
+});
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   var currentUrl = new URL(tab.url);
@@ -33,7 +30,7 @@ chrome.tabs.onRemoved.addListener(function (e) {
 });
 
 function removeCookies() {
-  console.log('remove cookies');
+  //console.log('remove cookies');
   chrome.tabs.getSelected(null, function (tab) {
     var currentUrl = new URL(tab.url);
     var tmpURL = previousUrl;
