@@ -80,7 +80,7 @@ function getIsCurrentDomainWhitelisted(result, domain) {
 
 function notify(title, body) {
   chrome.notifications.create('notification.warning', {
-    iconUrl: ('icon-notification-48.png'),
+    iconUrl: ('images/icon-notification-48.png'),
     title: title,
     message: body,
     type: 'basic',

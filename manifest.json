@@ -12,20 +12,20 @@
     // and will be unsupported in a future version of Chrome (TBD).
     "open_in_tab": true
   },
-  "web_accessible_resources": ["icon-settings.png", "icon-waste-bin.png"],
+  "web_accessible_resources": ["images/icon-settings.png", "images/icon-waste-bin.png"],
   "permissions": ["cookies", "storage", "tabs", "notifications", "history","webNavigation", "*://*/*"],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["js/background.js"],
     "persistent": false
   },
   "browser_action": {
-    "default_icon" : "icon.png",
+    "default_icon" : "images/icon.png",
     "default_title": "Start Event Page",
     "default_popup": "popup.html"
   },
   "icons": {
-    "128": "icon-notification-128.png",
-    "48": "icon-notification-48.png",
-    "16":"icon-notification-16.png"
+    "128": "images/icon-notification-128.png",
+    "48": "images/icon-notification-48.png",
+    "16":"images/icon-notification-16.png"
   }
 }
