@@ -14,7 +14,6 @@ chrome.tabs.getSelected(null, function (tab) {
     domainElem.value = domain;
 });
 
-
 addDefaultClickHandler();
 
 // render history list
@@ -35,7 +34,6 @@ clearListBtn.addEventListener('click', function (e) {
 });
 
 removeAllCookiesBtn.addEventListener('click', function (e) {
-
 });
 
 function addDefaultClickHandler() {
@@ -64,7 +62,6 @@ function onDefaultClick(e) {
 
 // on history buttons click (add/remove domain from whitelist)
 function onHistoryClick(e) {
-
 }
 
 // add domain to whitelist
@@ -95,7 +92,6 @@ function addDomainToHistory(url) {
     });
 
     addHistoryClickHandler();
-
 }
 
 // clear history
