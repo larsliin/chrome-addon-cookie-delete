@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Cookie Delete options page</title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 
 <body>
-    <h1>History</h1>
+    <h3>Settings</h3>
+    <div class="cookiedel__frm--group">
+        <input type="checkbox" id="cookiedel_options_notifications_cb" />
+        <label for="cookiedel_options_cb">Show notifications</label>
+    </div>
+    <div class="cookiedel__frm--group">
+        <input type="button" id="cookiedel_options_submit_btn" value="Save">
+    </div>
+    <h3>History</h3>
+    <div>
+        <input type="button" value="" class="cookiedel__tool cookiedel__clr--btn" id="clr_btn" />
+    </div>
     <div class="cookiedel__hstr">
         <div id="history_list" class="cookiedel__hstr-list"></div>
-      </div>
+    </div>
 
     <script src="js/helpers.js"></script>
     <script src="js/options.js"></script>

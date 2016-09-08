@@ -1,9 +1,9 @@
 body {
-  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-  font-size: 12px;
 }
 
 .cookiedel__body {
+  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+  font-size: 12px;
   margin: 0;
 }
 
@@ -88,24 +88,43 @@ hr {
   background-repeat: no-repeat;
   background-position: center center;
   background-color: transparent;
+  box-shadow: none;
+  min-width: 0;
+}
+.cookiedel__tool:hover {
+    background-image: url('/images/icon-empty-list.png') !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+}
+
+.cookiedel__tool--marg{
+    margin-right: 10px;
 }
 
 .cookiedel__sttngs--btn {
-  background-image: url('/images/icon-settings.png');
-  float: left;
+  background-image: url('/images/icon-settings.png');  
 }
 
 .cookiedel__trash--btn {
   background-image: url('/images/icon-waste-bin.png');
-  float: right;
-  margin-left: 10px;
 }
 
 .cookiedel__clr--btn {
-  background-image: url('/images/icon-empty-list.png');
-  float: right;
+  background-image: url('/images/icon-empty-list.png');  
 }
 
 .hidden {
   display: none;
 }
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+/*
+Options page
+*/

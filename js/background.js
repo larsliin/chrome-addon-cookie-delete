@@ -1,28 +1,22 @@
-chrome.storage.sync.get('whitelist', function (result) {
-  if (!result.whitelist) {
-    chrome.storage.sync.set({ 'whitelist': [] }, function (result) { });
+var settings = { show_notifications: true };
+
+chrome.storage.sync.set({ 'settings': settings }, function (result) { });
+
+chrome.storage.sync.get('history', function (result) {
+  if (!result.history) {
+    chrome.storage.sync.set({ 'history': [] }, function (result) { });
   }
 });
 
-function removeCookies(url) {
-  // delete cookies
-  chrome.cookies.getAll({ domain: domain }, function (cookies) {
-    var c = 0;
-
-    for (var i = 0; i < cookies.length; i++) {
-      chrome.cookies.remove({ url: tmpURL.origin + cookies[i].path, name: cookies[i].name }, function (e) {
-        if (c == (cookies.length - 1)) {
-          chrome.cookies.getAll({ domain: previousDomain }, function (cookies2) {
-            notify('Cookies deleted', cookies.length + ' cookies deleted from ' + previousDomain);
-          });
-        }
-
-        c++;
-
-      });
-    }
-  });
-}
+chrome.notifications.onButtonClicked.addListener(function () {
+  if (chrome.runtime.openOptionsPage) {
+    // New way to open options pages, if supported (Chrome 42+).
+    chrome.runtime.openOptionsPage();
+  } else {
+    // Reasonable fallback.
+    window.open(chrome.runtime.getURL('options.html'));
+  }
+});
 
 function notify(title, body) {
   chrome.notifications.create('notification.warning', {
@@ -41,12 +35,25 @@ function stripWWW(str) {
   return str.replace('www.', '')
 }
 
-chrome.notifications.onButtonClicked.addListener(function () {
-  if (chrome.runtime.openOptionsPage) {
-    // New way to open options pages, if supported (Chrome 42+).
-    chrome.runtime.openOptionsPage();
-  } else {
-    // Reasonable fallback.
-    window.open(chrome.runtime.getURL('options.html'));
-  }
-});
+// load json
+// loadJSON('../data.json',
+//   function (data) { console.log(data); },
+//   function (xhr) { console.error(xhr); }
+// );
+
+function loadJSON(path, success, error) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        if (success)
+          success(JSON.parse(xhr.responseText));
+      } else {
+        if (error)
+          error(xhr);
+      }
+    }
+  };
+  xhr.open("GET", path, true);
+  xhr.send();
+}
