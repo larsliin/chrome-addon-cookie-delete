@@ -111,7 +111,7 @@ function renderHistoryList() {
                     var id = result.history[i].id;
                     div.className = 'cookiedel__frm--group';
                     div.id = 'hstr_' + id;
-                    div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" id="hstr_txt_' + id + '" value="' + result.history[i].domain + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + id + '" type="button" value="' + deleteCookiesStr + '">';
+                    div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" id="hstr_txt_' + id + '" value="' + result.history[i].domain + '" />';
                     historyElem.appendChild(div);
 
                     c++;

@@ -3,6 +3,7 @@
   "description": "Deletes cookies from current site on exit",
   "version": "0.1",
   "manifest_version": 2,
+  "incognito":"not_allowed",
   "options_ui": {
     // Required.
     "page": "options.html",
