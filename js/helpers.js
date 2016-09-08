@@ -33,3 +33,11 @@ function clearHistory(elem, activeelem) {
         removeClass(cookiedelElem, 'cookiedel__hstr--active');
     }
 }
+
+function extrapolateUrlFromCookie(cookie) {
+    var prefix = cookie.secure ? "https://" : "http://";
+    if (cookie.domain.charAt(0) == ".")
+        prefix += "www";
+
+    return prefix + cookie.domain + cookie.path;
+}

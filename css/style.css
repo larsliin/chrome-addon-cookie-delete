@@ -48,6 +48,10 @@ input[type="text"].cookiedel__txt {
   font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
 }
 
+.cookiedel__stepper{
+  text-align: right;
+}
+
 .cookiedel__sbmt {
   float: right;
   width: 60px;
@@ -68,8 +72,6 @@ hr {
 .cookiedel__hstr--active .cookiedel__hstr {
   display: block;
 }
-
-.cookiedel__hstr {}
 
 .cookiedel__hstr {
   margin-top: 10px;
@@ -92,7 +94,6 @@ hr {
   min-width: 0;
 }
 .cookiedel__tool:hover {
-    background-image: url('/images/icon-empty-list.png') !important;
     box-shadow: none !important;
     border-color: transparent !important;
 }
@@ -101,14 +102,17 @@ hr {
     margin-right: 10px;
 }
 
+.cookiedel__sttngs--btn:hover,
 .cookiedel__sttngs--btn {
   background-image: url('/images/icon-settings.png');  
 }
 
+.cookiedel__trash--btn:hover,
 .cookiedel__trash--btn {
   background-image: url('/images/icon-waste-bin.png');
 }
 
+.cookiedel__clr--btn:hover,
 .cookiedel__clr--btn {
   background-image: url('/images/icon-empty-list.png');  
 }
