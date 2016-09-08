@@ -1,4 +1,4 @@
-var settings = { show_notifications: true };
+var settings = { show_notifications: true, history_length: 5 };
 
 chrome.storage.sync.set({ 'settings': settings }, function (result) { });
 

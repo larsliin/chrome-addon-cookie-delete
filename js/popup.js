@@ -8,6 +8,10 @@ var removeAllCookiesBtn = document.getElementById('remove_all_btn');
 var clearListBtn = document.getElementById('clr_btn');
 var historyLength = 5;
 
+chrome.storage.sync.get('settings', function (result) {
+    historyLength = result.settings.history_length;
+});
+
 chrome.tabs.getSelected(null, function (tab) {
     var url = new URL(tab.url);
     domain = stripWWW(url.hostname);
