@@ -1,82 +1,27 @@
-var currentDomain, previousUrl, currentTabId;
-chrome.webNavigation.onDOMContentLoaded.addListener(function (e) {
-  if (e.frameId == 0) {
-    chrome.tabs.getSelected(null, function (tab) {
-      var currentUrl = new URL(tab.url);
-      var previousDomain = previousUrl ? (previousUrl.hostname).replace('www.', '') : '';
-
-      currentDomain = (currentUrl.hostname).replace('www.', '');
-
-      if (previousDomain != currentDomain) {
-        removeCookies();
-      }
-    });
+chrome.storage.sync.get('whitelist', function (result) {
+  if (!result.whitelist) {
+    chrome.storage.sync.set({ 'whitelist': [] }, function (result) { });
   }
 });
 
-chrome.webNavigation.onErrorOccurred.addListener(function (e) {
-});
+function removeCookies(url) {
+  // delete cookies
+  chrome.cookies.getAll({ domain: domain }, function (cookies) {
+    var c = 0;
 
-chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
-  if (currentTabId != tabId) {
-    currentTabId = tabId;
-
-    chrome.tabs.getSelected(null, function (tab) {
-      previousUrl = new URL(tab.url);
-    });
-  }
-});
-
-chrome.tabs.onRemoved.addListener(function (e) {
-  removeCookies();
-});
-
-function removeCookies() {
-  
-
-  chrome.tabs.getSelected(null, function (tab) {
-    var currentUrl = new URL(tab.url);
-    var tmpURL = previousUrl;
-    var previousDomain = tmpURL ? stripWWW(tmpURL.hostname) : '';
-    var currentDomain = stripWWW(currentUrl.hostname);
-
-    chrome.storage.sync.get('whitelist', function (result) {
-      // delete cookies
-      if (previousUrl && !getIsCurrentDomainWhitelisted(result, previousDomain)) {
-        if (previousDomain != currentDomain) {
-
-          chrome.cookies.getAll({ domain: previousDomain }, function (cookies) {
-            var c = 0;
-
-            for (var i = 0; i < cookies.length; i++) {
-              chrome.cookies.remove({ url: tmpURL.origin + cookies[i].path, name: cookies[i].name }, function (e) {
-                if (c == (cookies.length - 1)) {
-                  chrome.cookies.getAll({ domain: previousDomain }, function (cookies2) {
-                    notify('Cookies deleted', cookies.length + ' cookies deleted from ' + previousDomain);
-                  });
-                }
-
-                c++;
-
-              });
-            }
+    for (var i = 0; i < cookies.length; i++) {
+      chrome.cookies.remove({ url: tmpURL.origin + cookies[i].path, name: cookies[i].name }, function (e) {
+        if (c == (cookies.length - 1)) {
+          chrome.cookies.getAll({ domain: previousDomain }, function (cookies2) {
+            notify('Cookies deleted', cookies.length + ' cookies deleted from ' + previousDomain);
           });
         }
-      }
 
-      previousUrl = currentUrl;
+        c++;
 
-    });
-  });
-}
-
-function getIsCurrentDomainWhitelisted(result, domain) {
-  for (var index = 0; index < result.whitelist.length; index++) {
-    if (result.whitelist[index] == domain) {
-      return true;
+      });
     }
-  }
-  return false;
+  });
 }
 
 function notify(title, body) {

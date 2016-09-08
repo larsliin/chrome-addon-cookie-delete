@@ -1,6 +1,4 @@
-var tmpHistoryDomainObj = {};
 var deleteCookiesStr = 'Remove';
-var keepCookiesStr = 'Add';
 var cookiedelElem = document.getElementById('cookiedel');
 var domainElem = document.getElementById('curr_domain');
 var submitElem = document.getElementById('curr_domain_submit');
@@ -9,35 +7,18 @@ var settingsBtn = document.getElementById('settings_btn');
 var removeAllCookiesBtn = document.getElementById('remove_all_btn');
 var clearListBtn = document.getElementById('clr_btn');
 var historyLength = 5;
-var isWhitelisted = false;
 
-// set default cta
-submitElem.value = keepCookiesStr;
+chrome.tabs.getSelected(null, function (tab) {
+    var url = new URL(tab.url);
+    domain = stripWWW(url.hostname);
+    domainElem.value = domain;
+});
+
 
 addDefaultClickHandler();
 
 // render history list
 renderHistoryList();
-
-// set default values
-chrome.tabs.getSelected(null, function (tab) {
-    var currentURL = new URL(tab.url);
-    currentDomain = stripWWW(currentURL.hostname);
-    domainElem.value = currentDomain;
-
-    chrome.storage.sync.get('whitelist', function (result) {
-        if (!result.whitelist) {
-            chrome.storage.sync.set({ 'whitelist': [] }, function (result) { });
-        } else {
-            for (var index = 0; index < result.whitelist.length; index++) {
-                if (result.whitelist[index] == currentDomain) {
-                    isWhitelisted = true;
-                    submitElem.value = deleteCookiesStr;
-                }
-            }
-        }
-    });
-});
 
 settingsBtn.addEventListener('click', function (e) {
     if (chrome.runtime.openOptionsPage) {
@@ -54,7 +35,7 @@ clearListBtn.addEventListener('click', function (e) {
 });
 
 removeAllCookiesBtn.addEventListener('click', function (e) {
-    
+
 });
 
 function addDefaultClickHandler() {
@@ -69,95 +50,52 @@ function addHistoryClickHandler() {
 }
 
 function onDefaultClick(e) {
-    var id = stripDot(currentDomain);
-
-    if (!isWhitelisted) {
-        // add current domain to whitelist
-        addToStorage(currentDomain);
-
-        // add class to wrapper if history length is 1 or more
-        if (!hasClass(cookiedelElem, 'cookiedel__hstr--active')) {
-            cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstr--active' : 'cookiedel__hstr--active';
-        }
-
-        if (!tmpHistoryDomainObj[id]) {
-            addDomainToHistory(currentDomain);
-        } else {
-            tmpHistoryDomainObj[id].button.value = deleteCookiesStr;
-            tmpHistoryDomainObj[id].added = true;
-        }
-
-        notify('Domain added', 'Cookies will be deleted when navigating to other domain.');
-
-        isWhitelisted = true;
-        submitElem.value = deleteCookiesStr;
-    } else {
-        // remove current domain from whitelist
-        removeFromStorage(currentDomain);
-
-        isWhitelisted = false;
-        submitElem.value = keepCookiesStr;
-
-        if (!tmpHistoryDomainObj[id]) {
-            addDomainToHistory(currentDomain);
-
-        }
-        tmpHistoryDomainObj[id].button.value = keepCookiesStr;
-        tmpHistoryDomainObj[id].button.added = false;
+    if (!hasClass(cookiedelElem, 'cookiedel__hstr--active')) {
+        cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstr--active' : 'cookiedel__hstr--active';
     }
+
+    chrome.tabs.getSelected(null, function (tab) {
+        var currentURL = new URL(tab.url);
+        addDomainToHistory(currentURL);
+
+        notify('Cookies removed', 'All cookies from domain are removed');
+    });
 }
 
 // on history buttons click (add/remove domain from whitelist)
 function onHistoryClick(e) {
-    var domain = e.target.previousSibling.value;
-    var domainKey = stripDot(domain);
 
-    if (tmpHistoryDomainObj[domainKey].added) {
-        removeFromStorage(domain);
-
-        e.target.value = keepCookiesStr;
-
-        if (domain == currentDomain) {
-            submitElem.value = keepCookiesStr;
-            isWhitelisted = false;
-        }
-
-        tmpHistoryDomainObj[domainKey].added = false;
-
-    } else {
-        addToStorage(domain);
-
-        e.target.value = deleteCookiesStr;
-
-        if (domain == currentDomain) {
-            submitElem.value = deleteCookiesStr;
-            isWhitelisted = true;
-        }
-
-        tmpHistoryDomainObj[domainKey].added = true;
-    }
 }
 
 // add domain to whitelist
-function addDomainToHistory(domain) {
+function addDomainToHistory(url) {
+    var domainStrippedWWW = stripWWW(url.hostname);
+    var id = stripDot(domainStrippedWWW);
     var div = document.createElement('div');
-    var id = stripDot(domain);
+    var elems = historyElem.getElementsByClassName('cookiedel__frm--group');
 
-    if (!document.getElementById('hstr_' + stripDot(currentDomain))) {
-        if (historyElem.childNodes.length > historyLength - 1) {
-            historyElem.removeChild(historyElem.lastChild);
-        }
+    div.className = 'cookiedel__frm--group';
+    div.id = 'hstr_' + id;
+    div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" value="' + domainStrippedWWW + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + id + '" type="button" value="' + deleteCookiesStr + '">';
 
-        div.className = 'cookiedel__frm--group';
-        div.id = 'hstr_' + id;
-        div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" value="' + domain + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + id + '" type="button" value="' + deleteCookiesStr + '">';
+    historyElem.insertBefore(div, historyElem.firstChild);
 
-        historyElem.insertBefore(div, historyElem.firstChild);
-
-        tmpHistoryDomainObj[id] = { added: true, button: document.getElementById('hstr_sbmt_' + id), text: document.getElementById('hstr_txt_' + id) };
-
-        addHistoryClickHandler();
+    if (elems.length > historyLength) {
+        historyElem.removeChild(elems[elems.length - 1]);
     }
+
+    chrome.storage.sync.get('whitelist', function (result) {
+        var tmparr = result.whitelist;
+        var obj = { id: id, domain: domainStrippedWWW, origin: url.origin, button_elem: document.getElementById('hstr_sbmt_' + id), text_elem: document.getElementById('hstr_txt_' + id) };
+
+        tmparr.push(obj);
+
+        chrome.storage.sync.set({ 'whitelist': tmparr }, function (result) { });
+
+    });
+
+    addHistoryClickHandler();
+
 }
 
 // clear history
@@ -168,13 +106,7 @@ function clearHistory() {
 
     chrome.storage.sync.set({ 'whitelist': [] }, function (result) { });
 
-    tmpHistoryDomainObj = {};
-
     removeClass(cookiedelElem, 'cookiedel__hstr--active');
-
-    isWhitelisted = false;
-
-    submitElem.value = keepCookiesStr;
 }
 
 // render whitelisted domain history
@@ -183,19 +115,17 @@ function renderHistoryList() {
         var c = 0;
         for (var i = result.whitelist.length - 1; i >= 0; i--) {
             if (c < historyLength) {
+                console.log(c);
                 var div = document.createElement('div');
-                var id = stripDot(result.whitelist[i]);
+                var id = result.whitelist[i].id;
                 div.className = 'cookiedel__frm--group';
                 div.id = 'hstr_' + id;
-                div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" id="hstr_txt_' + id + '" value="' + result.whitelist[i] + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + id + '" type="button" value="' + deleteCookiesStr + '">';
+                div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" id="hstr_txt_' + id + '" value="' + result.whitelist[i].domain + '" /><input class="cookiedel__sbmt cookiedel__sbmt--hstr" id="hstr_sbmt_' + id + '" type="button" value="' + deleteCookiesStr + '">';
                 historyElem.appendChild(div);
 
-                tmpHistoryDomainObj[id] = { added: true, button: document.getElementById('hstr_sbmt_' + id), text: document.getElementById('hstr_txt_' + id) }
                 c++;
             }
         }
-
-        console.log(tmpHistoryDomainObj);
 
         if (result.whitelist.length > 0) {
             cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstr--active' : 'cookiedel__hstr--active';
@@ -205,30 +135,9 @@ function renderHistoryList() {
     });
 }
 
-function addToStorage(domain) {
-    chrome.storage.sync.get('whitelist', function (result) {
-        var arr = result.whitelist;
-        arr.push(domain);
-
-        chrome.storage.sync.set({ 'whitelist': arr }, function (result) { });
-    });
-}
-
-function removeFromStorage(domain) {
-    chrome.storage.sync.get('whitelist', function (result) {
-        var arr = result.whitelist;
-        var index = arr.indexOf(domain);
-        if (index > -1) {
-            arr.splice(index, 1);
-        }
-
-        chrome.storage.sync.set({ 'whitelist': arr }, function (result) { });
-    });
-}
-
 function notify(title, body) {
     chrome.notifications.create('notification.warning', {
-        iconUrl: ('icon-notification-48.png'),
+        iconUrl: ('images/icon-notification-48.png'),
         title: title,
         message: body,
         type: 'basic',
@@ -258,18 +167,5 @@ function stripWWW(str) {
 }
 
 function stripDot(str) {
-    return str.replace('.', '')
-}
-
-deleteAllNotWhitelistedCookies();
-
-
-function deleteAllNotWhitelistedCookies() {
-  chrome.cookies.getAll({  }, function (cookies) {
-    console.log(cookies);
-  });
-
-  chrome.storage.sync.get('whitelist', function (result) {
-    var arr = result.whitelist;
-  });
+    return str.replace('.', '_')
 }
