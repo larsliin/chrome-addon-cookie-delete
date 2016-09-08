@@ -1,7 +1,9 @@
 var currentDomain, previousUrl, currentTabId;
-chrome.webNavigation.onDOMContentLoaded.addListener(function (e) {
-  if (e.frameId == 0) {
+
+chrome.webRequest.onBeforeRequest.addListener(function (e) {
+  //if (e.frameId == 0) {
     chrome.tabs.getSelected(null, function (tab) {
+
       var currentUrl = new URL(tab.url);
       var previousDomain = previousUrl ? (previousUrl.hostname).replace('www.', '') : '';
 
@@ -11,8 +13,10 @@ chrome.webNavigation.onDOMContentLoaded.addListener(function (e) {
         removeCookies();
       }
     });
-  }
-});
+  //}
+}, { urls: ["<all_urls>"] });
+
+chrome.webNavigation.onCompleted.addListener(function (e) { });
 
 chrome.webNavigation.onErrorOccurred.addListener(function (e) {
 });
@@ -32,7 +36,7 @@ chrome.tabs.onRemoved.addListener(function (e) {
 });
 
 function removeCookies() {
-  
+  console.log('remove');
 
   chrome.tabs.getSelected(null, function (tab) {
     var currentUrl = new URL(tab.url);

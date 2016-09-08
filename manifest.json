@@ -13,7 +13,7 @@
     "open_in_tab": true
   },
   "web_accessible_resources": ["images/icon-settings.png", "images/icon-waste-bin.png", "images/icon-empty-list.png"],
-  "permissions": ["cookies", "storage", "tabs", "notifications", "history","webNavigation", "*://*/*", "<all_urls>"],
+  "permissions": ["cookies", "storage", "tabs", "notifications", "history","webNavigation","webRequest", "*://*/*", "<all_urls>"],
   "background": {
     "scripts": ["js/background.js"],
     "persistent": true
