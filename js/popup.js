@@ -187,7 +187,7 @@ function notify(title, body) {
                 title: title,
                 message: body,
                 type: 'basic',
-                buttons: [{ title: 'Settings' }],
+                //buttons: [{ title: 'Settings' }],
                 isClickable: true,
                 priority: 0,
             }, function () { });
