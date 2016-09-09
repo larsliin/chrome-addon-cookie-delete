@@ -36,12 +36,15 @@ input[type=button]:active {
     margin: 4px 0;
 }
 
+.cookiedel__txt--wrp {
+    float: left;
+}
+
 input[type="text"].cookiedel__txt {
+    width: 100%;
     white-space: pre;
     text-overflow: ellipsis;
     overflow: hidden;
-    float: left;
-    width: 100%;
     display: block;
     box-sizing: border-box;
     border: none;
@@ -50,6 +53,11 @@ input[type="text"].cookiedel__txt {
     font-size: 12px;
     font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
     height: 20px;
+}
+
+input[type="text"].cookiedel__txt:focus,
+input[type="text"].cookiedel__txt {
+    outline: none;
 }
 
 input[type="text"].cookiedel__txt--dflt {

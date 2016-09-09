@@ -1,42 +1,52 @@
 var deleteCookiesStr = 'Remove';
+var currentDomain = '';
+var maxHistoryItems = 0;
 var cookiedelElem = document.getElementById('cookiedel');
-var domainElem = document.getElementById('curr_domain');
-var submitElem = document.getElementById('curr_domain_submit');
+var domainTxt = document.getElementById('curr_domain');
+var domainTxtWrp = document.getElementById('curr_domain_wrp');
+var dosubmitBtn = document.getElementById('curr_domain_submit');
 var historyElem = document.getElementById('history_list');
 var settingsBtn = document.getElementById('settings_btn');
 var removeAllCookiesBtn = document.getElementById('remove_all_btn');
 var clearListBtn = document.getElementById('clr_btn');
 var browserHistory = [];
 
-addRemoveDomainCookiesClickHandler();
+// remove site specific cookies button event handler
+dosubmitBtn.addEventListener('click', onRemoveDomainCookies);
 
+// get settings
 chrome.storage.sync.get('settings', function(result) {
-    getBrowserHistory(result.settings.browser_history_max_days);
+    maxHistoryItems = result.settings.history_length;
 
-    renderHistoryList(result.settings.history_length);
+    updateBrowserHistory(result.settings.browser_history_max_days);
+
+    renderHistoryList(maxHistoryItems);
 });
 
-function getBrowserHistory(maxdays) {
-    var fromDate = (new Date).getTime() - (1000 * 60 * 60 * 24 * maxdays);
-
-    chrome.history.search({ text: '', maxResults: 5000, startTime: fromDate, endTime: (new Date()).getTime() }, function(e) {
-        for (var i = 0; i < e.length; i++) {
-            var url = extractDomain(e[i].url);
-            var date = new Date(e[i].lastVisitTime);
-            var datePretty = getWeekdayStr(date.getDay()) + ', ' + date.getDate() + nth(date.getDate()) + ' of ' + getMonthStr(date.getMonth()) + ', ' + date.getFullYear() + ', ' + date.getHours() + ':' + date.getMinutes();
-            var obj;
-
-            url = stripWWW(url);
-            obj = { url: url, lastVisitTime: e[i].lastVisitTime, lastVisitTimePretty: datePretty };
-
-            browserHistory.push(obj);
-        }
-    });
-}
-
+// get current URL and show in popup textfield
 chrome.tabs.getSelected(null, function(tab) {
     var url = new URL(tab.url);
-    domainElem.value = stripWWW(url.hostname);
+    currentDomain = stripWWW(url.hostname);
+    domainTxt.value = currentDomain;
+
+    // set autocomplete
+    // var c = completely(domainTxtWrp, {});
+    // c.setText(currentDomain);
+    // c.options = ['cocoa', 'coffee', 'orange'];
+    // c.repaint();
+
+});
+
+domainTxt.addEventListener('focus', function(e) {
+    if (domainTxt.value == currentDomain) {
+        domainTxt.value = '';
+    }
+});
+
+domainTxt.addEventListener('blur', function(e) {
+    if (domainTxt.value == '') {
+        domainTxt.value = currentDomain;
+    }
 });
 
 // settings button clickhandler
@@ -59,14 +69,9 @@ removeAllCookiesBtn.addEventListener('click', function(e) {
     clearHistory(historyElem, cookiedelElem);
 });
 
-// remove site specific cookies button event handler
-function addRemoveDomainCookiesClickHandler() {
-    submitElem.addEventListener('click', onRemoveDomainCookies);
-}
-
 // remove site specific cookies click handler
 function onRemoveDomainCookies(e) {
-    if (!hasClass(cookiedelElem, 'cookiedel__hstr--active') && maxItemsInHistory > 0) {
+    if (!hasClass(cookiedelElem, 'cookiedel__hstr--active') && maxHistoryItems > 0) {
         cookiedelElem.className += cookiedelElem.className ? ' cookiedel__hstr--active' : 'cookiedel__hstr--active';
     }
 
@@ -92,7 +97,7 @@ function addDomainToHistory(url) {
     historyElem.insertBefore(div, historyElem.firstChild);
 
     // remove last item from history list
-    if (elems.length > maxItemsInHistory) {
+    if (elems.length > maxHistoryItems) {
         historyElem.removeChild(elems[elems.length - 1]);
     }
 
