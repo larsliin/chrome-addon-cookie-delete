@@ -1,133 +1,154 @@
-body {
-}
+body {}
 
 .cookiedel__body {
-  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-  font-size: 12px;
-  margin: 0;
+    font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    font-size: 12px;
+    margin: 0;
 }
 
 input[type=button] {
-  outline: none;
+    outline: none;
 }
 
 input[type=button]:active {
-  outline: none;
+    outline: none;
 }
 
 .cookiedel {
-  width: 250px;
-  overflow: hidden;
+    width: 250px;
+    overflow: hidden;
 }
 
 .cookiedel__content {
-  padding: 0 10px;
+    padding: 0 10px;
 }
 
 .cookiedel__header {
-  margin-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.cookiedel__frm {
+    margin-bottom: 15px;
 }
 
 .cookiedel__frm--group {
-  overflow: hidden;
-  margin: 10px 0;
+    overflow: hidden;
+    margin: 4px 0;
 }
 
 input[type="text"].cookiedel__txt {
-  white-space: pre;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  float: left;
-  width: 170px;
-  display: block;
-  box-sizing: border-box;
-  border: none;
-  color: #000;
-  background-color: transparent;
-  font-size: 12px;
-  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    white-space: pre;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    float: left;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    border: none;
+    color: #000;
+    background-color: transparent;
+    font-size: 12px;
+    font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    height: 20px;
 }
 
-.cookiedel__stepper{
-  text-align: right;
+input[type="text"].cookiedel__txt--dflt {
+    height: 22px;
+    border: solid 1px #ccc;
+    width: 160px;
+    border-radius: 2px;
+    padding: 3px;
+}
+
+.cookiedel__stepper {
+    text-align: right;
 }
 
 .cookiedel__sbmt {
-  float: right;
-  width: 60px;
-  text-align: center;
-  font-size: 12px;
-  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    border-radius: 2px;
+    float: right;
+    width: 60px;
+    text-align: center;
+    font-size: 12px;
+    font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    box-sizing: border-box;
+    height: 22px;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 1px;
+    background-color: #eee;
 }
 
 hr {
-  background-color: #ccc;
-  border-top: none;
-  height: 1px;
-  border-bottom: solid 1px #eee;
-  border-left: none;
-  border-right: none;
+    background-color: #ccc;
+    border-top: none;
+    height: 1px;
+    border-bottom: solid 1px #eee;
+    border-left: none;
+    border-right: none;
 }
 
 .cookiedel__hstr--active .cookiedel__hstr {
-  display: block;
+    display: block;
 }
 
 .cookiedel__hstr {
-  margin-top: 10px;
+    margin: 15px 0;
 }
 
 .cookiedel__sttngs {
-  background-color: #eee;
-  padding: 5px 10px;
-  overflow: hidden;
+    background-color: #eee;
+    padding: 5px 10px;
+    overflow: hidden;
 }
 
 .cookiedel__tool {
-  border: none;
-  width: 16px;
-  background-size: 15px 15px;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-color: transparent;
-  box-shadow: none;
-  min-width: 0;
+    border: none;
+    width: 16px;
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: transparent;
+    box-shadow: none;
+    min-width: 0;
 }
+
 .cookiedel__tool:hover {
     box-shadow: none !important;
     border-color: transparent !important;
 }
 
-.cookiedel__tool--marg{
+.cookiedel__tool--marg {
     margin-right: 10px;
 }
 
 .cookiedel__sttngs--btn:hover,
 .cookiedel__sttngs--btn {
-  background-image: url('/images/icon-settings.png');  
+    background-image: url('/images/icon-settings.png');
 }
 
 .cookiedel__trash--btn:hover,
 .cookiedel__trash--btn {
-  background-image: url('/images/icon-waste-bin.png');
+    background-image: url('/images/icon-waste-bin.png');
 }
 
 .cookiedel__clr--btn:hover,
 .cookiedel__clr--btn {
-  background-image: url('/images/icon-empty-list.png');  
+    background-image: url('/images/icon-empty-list.png');
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
 .pull-left {
-  float: left;
+    float: left;
 }
 
 .pull-right {
-  float: right;
+    float: right;
 }
+
 
 /*
 Options page
