@@ -1,7 +1,7 @@
 body {}
 
 .cookiedel__body {
-    font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    font-family: "BlinkMacSystemFont", "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
     font-size: 12px;
     margin: 0;
 }
@@ -12,6 +12,11 @@ input[type=button] {
 
 input[type=button]:active {
     outline: none;
+    color: #666;
+    padding-top: 1px;
+    padding-right: 0px;
+    padding-left: 1px;
+    padding-bottom: 0;
 }
 
 .cookiedel {
@@ -20,7 +25,7 @@ input[type=button]:active {
 }
 
 .cookiedel__content {
-    padding: 0 10px;
+    margin: 10px;
 }
 
 .cookiedel__header {
@@ -40,32 +45,37 @@ input[type=button]:active {
     float: left;
 }
 
+.cookiedel__txt--hidden {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+}
+
 input[type="text"].cookiedel__txt {
     width: 100%;
     white-space: pre;
-    text-overflow: ellipsis;
+    /*text-overflow: ellipsis;*/
     overflow: hidden;
     display: block;
     box-sizing: border-box;
     border: none;
     color: #000;
     background-color: transparent;
-    font-size: 12px;
-    font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    font-size: 12px !important;
+    font-family: "BlinkMacSystemFont", "Segoe UI", "Lucida Grande", Tahoma, sans-serif !important;
     height: 20px;
 }
 
-input[type="text"].cookiedel__txt:focus,
-input[type="text"].cookiedel__txt {
+input[type="text"].cookiedel__txt:focus, input[type="text"].cookiedel__txt {
     outline: none;
 }
 
 input[type="text"].cookiedel__txt--dflt {
     height: 22px;
-    border: solid 1px #ccc;
-    width: 160px;
+    border: solid 1px #ccc !important;
+    width: 160px !important;
     border-radius: 2px;
-    padding: 3px;
+    padding: 3px !important;
 }
 
 .cookiedel__stepper {
@@ -130,18 +140,15 @@ hr {
     margin-right: 10px;
 }
 
-.cookiedel__sttngs--btn:hover,
-.cookiedel__sttngs--btn {
+.cookiedel__sttngs--btn:hover, .cookiedel__sttngs--btn {
     background-image: url('/images/icon-settings.png');
 }
 
-.cookiedel__trash--btn:hover,
-.cookiedel__trash--btn {
+.cookiedel__trash--btn:hover, .cookiedel__trash--btn {
     background-image: url('/images/icon-waste-bin.png');
 }
 
-.cookiedel__clr--btn:hover,
-.cookiedel__clr--btn {
+.cookiedel__clr--btn:hover, .cookiedel__clr--btn {
     background-image: url('/images/icon-empty-list.png');
 }
 

@@ -1,14 +1,14 @@
-var settings = { show_notifications: true, history_length: 5, browser_history_max_days: 5 };
+var settings = { show_notifications: true, history_length: 5, browser_history_max_days: 5, simple: false };
 
-chrome.storage.sync.set({ 'settings': settings }, function(result) {});
+chrome.storage.sync.set({ 'settings': settings }, function (result) { });
 
-chrome.storage.sync.get('history', function(result) {
+chrome.storage.sync.get('history', function (result) {
     if (!result.history) {
-        chrome.storage.sync.set({ 'history': [] }, function(result) {});
+        chrome.storage.sync.set({ 'history': [] }, function (result) { });
     }
 });
 
-chrome.notifications.onButtonClicked.addListener(function() {
+chrome.notifications.onButtonClicked.addListener(function () {
     if (chrome.runtime.openOptionsPage) {
         // New way to open options pages, if supported (Chrome 42+).
         chrome.runtime.openOptionsPage();
@@ -28,7 +28,7 @@ function notify(title, body) {
         isClickable: true,
         priority: 0,
         requireInteraction: false
-    }, function() {});
+    }, function () { });
 }
 
 function stripWWW(str) {
@@ -43,7 +43,7 @@ function stripWWW(str) {
 
 function loadJSON(path, success, error) {
     var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 if (success)

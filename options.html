@@ -9,13 +9,23 @@
 <body>
     <h3>Settings</h3>
     <div class="cookiedel__frm--group">
-        <input type="checkbox" id="cookiedel_options_notifications_cb" />
-        <label for="cookiedel_options_cb">Show notifications</label>
+        <input type="checkbox" id="options_simple_cb" />
+        <label for="options_simple_cb">Simple</label>
     </div>
     <div class="cookiedel__frm--group">
-        <input type="number" name="points" step="1" min="0" max="25" id="cookiedel_options_historylength_st" class="cookiedel__stepper">
-        <label for="cookiedel_options_historylength_st">Items in history</label>
+        <input type="checkbox" id="options_notifications_cb" />
+        <label for="options_notifications_cb">Show notifications</label>
     </div>
+    <div class="cookiedel__frm--group">
+        <input type="number" name="options_historylist_length" step="1" min="0" max="25" id="options_historylist_length" class="cookiedel__stepper">
+        <label for="options_historylist_length">Items in history</label>
+    </div>
+
+    <div class="cookiedel__frm--group">
+        <input type="number" name="options_historydays_length" step="1" min="0" max="25" id="options_historydays_length" class="cookiedel__stepper">
+        <label for="options_historydays_length">Search days in history</label>
+    </div>
+
     <div class="cookiedel__frm--group">
         <input type="button" id="cookiedel_options_submit_btn" value="Save">
     </div>
