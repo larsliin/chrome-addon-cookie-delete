@@ -4,15 +4,38 @@
     <title>Cookie Delete options page</title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
-
 <body>
-    <h1>History</h1>
-    <div class="cookiedel__hstr">
-        <div id="history_list" class="cookiedel__hstr-list"></div>
-      </div>
-
+    <h1>Settings</h1>
+    <div class="table">
+        <div class="table-row">
+            <div class="cookiedel__frm--group cookiedel__frm--optionsgroup table-cell">
+                <input type="checkbox" id="options_simple_cb" />
+                <label for="options_simple_cb" class="cookiedel__frm--optionslabel">Simple</label>
+            </div>
+            <div class="cookiedel__frm--group cookiedel__frm--optionsgroup table-cell">
+                <input type="checkbox" id="options_notifications_cb" class="cookiedel__frm--optionsinp" />
+                <label for="options_notifications_cb" class="cookiedel__frm--optionslabel">Show notifications</label>
+            </div>
+            <div class="cookiedel__frm--group cookiedel__frm--optionsgroup table-cell">
+                <input type="number" name="options_historylist_length" step="1" min="0" max="25" id="options_historylist_length" class="cookiedel__frm--optionsinp cookiedel__stepper">
+                <label for="options_historylist_length" class="cookiedel__frm--optionslabel">Items in history</label>
+            </div>
+            <div class="cookiedel__frm--group cookiedel__frm--optionsgroup table-cell">
+                <input type="number" name="options_historydays_length" step="1" min="0" max="25" id="options_historydays_length" class="cookiedel__frm--optionsinp cookiedel__stepper">
+                <label for="options_historydays_length" class="cookiedel__frm--optionslabel">Search days in history</label>
+            </div>
+        </div>
+    </div>
+    <div class="cookiedel__frm--group">
+        <input type="button" id="cookiedel_options_submit_btn" class="cookiedel__frm--submit" value="Save">
+    </div>
+    <hr />
+    <h3>History</h3>
+    <div>
+        <input type="button" value="Clear history" class="" id="clr_btn" />
+    </div>
+    <ul id="history_list" class="cookiedel__hstr"></ul>
     <script src="js/helpers.js"></script>
     <script src="js/options.js"></script>
 </body>
-
 </html>

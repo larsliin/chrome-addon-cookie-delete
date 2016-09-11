@@ -1,107 +1,59 @@
-var currentDomain, previousUrl, currentTabId;
-chrome.webNavigation.onDOMContentLoaded.addListener(function (e) {
-  if (e.frameId == 0) {
-    chrome.tabs.getSelected(null, function (tab) {
-      var currentUrl = new URL(tab.url);
-      var previousDomain = previousUrl ? (previousUrl.hostname).replace('www.', '') : '';
+var settings = { show_notifications: true, history_length: 5, browser_history_max_days: 5, simple: false };
 
-      currentDomain = (currentUrl.hostname).replace('www.', '');
+chrome.storage.sync.set({ 'settings': settings }, function (result) { });
 
-      if (previousDomain != currentDomain) {
-        removeCookies();
-      }
-    });
-  }
-});
-
-chrome.webNavigation.onErrorOccurred.addListener(function (e) {
-});
-
-chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
-  if (currentTabId != tabId) {
-    currentTabId = tabId;
-
-    chrome.tabs.getSelected(null, function (tab) {
-      previousUrl = new URL(tab.url);
-    });
-  }
-});
-
-chrome.tabs.onRemoved.addListener(function (e) {
-  removeCookies();
-});
-
-function removeCookies() {
-  
-
-  chrome.tabs.getSelected(null, function (tab) {
-    var currentUrl = new URL(tab.url);
-    var tmpURL = previousUrl;
-    var previousDomain = tmpURL ? stripWWW(tmpURL.hostname) : '';
-    var currentDomain = stripWWW(currentUrl.hostname);
-
-    chrome.storage.sync.get('whitelist', function (result) {
-      // delete cookies
-      if (previousUrl && !getIsCurrentDomainWhitelisted(result, previousDomain)) {
-        if (previousDomain != currentDomain) {
-
-          chrome.cookies.getAll({ domain: previousDomain }, function (cookies) {
-            var c = 0;
-
-            for (var i = 0; i < cookies.length; i++) {
-              chrome.cookies.remove({ url: tmpURL.origin + cookies[i].path, name: cookies[i].name }, function (e) {
-                if (c == (cookies.length - 1)) {
-                  chrome.cookies.getAll({ domain: previousDomain }, function (cookies2) {
-                    notify('Cookies deleted', cookies.length + ' cookies deleted from ' + previousDomain);
-                  });
-                }
-
-                c++;
-
-              });
-            }
-          });
-        }
-      }
-
-      previousUrl = currentUrl;
-
-    });
-  });
-}
-
-function getIsCurrentDomainWhitelisted(result, domain) {
-  for (var index = 0; index < result.whitelist.length; index++) {
-    if (result.whitelist[index] == domain) {
-      return true;
+chrome.storage.sync.get('history', function (result) {
+    if (!result.history) {
+        chrome.storage.sync.set({ 'history': [] }, function (result) { });
     }
-  }
-  return false;
-}
+});
+
+chrome.notifications.onButtonClicked.addListener(function () {
+    if (chrome.runtime.openOptionsPage) {
+        // New way to open options pages, if supported (Chrome 42+).
+        chrome.runtime.openOptionsPage();
+    } else {
+        // Reasonable fallback.
+        window.open(chrome.runtime.getURL('options.html'));
+    }
+});
 
 function notify(title, body) {
-  chrome.notifications.create('notification.warning', {
-    iconUrl: ('images/icon-notification-48.png'),
-    title: title,
-    message: body,
-    type: 'basic',
-    buttons: [{ title: 'Notification settings' }],
-    isClickable: true,
-    priority: 0,
-    requireInteraction: false
-  }, function () { });
+    chrome.notifications.create('notification.warning', {
+        iconUrl: ('images/icon-notification-48.png'),
+        title: title,
+        message: body,
+        type: 'basic',
+        buttons: [{ title: 'Notification settings' }],
+        isClickable: true,
+        priority: 0,
+        requireInteraction: false
+    }, function () { });
 }
 
 function stripWWW(str) {
-  return str.replace('www.', '')
+    return str.replace('www.', '')
 }
 
-chrome.notifications.onButtonClicked.addListener(function () {
-  if (chrome.runtime.openOptionsPage) {
-    // New way to open options pages, if supported (Chrome 42+).
-    chrome.runtime.openOptionsPage();
-  } else {
-    // Reasonable fallback.
-    window.open(chrome.runtime.getURL('options.html'));
-  }
-});
+// load json
+// loadJSON('../data.json',
+//   function (data) { console.log(data); },
+//   function (xhr) { console.error(xhr); }
+// );
+
+function loadJSON(path, success, error) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                if (success)
+                    success(JSON.parse(xhr.responseText));
+            } else {
+                if (error)
+                    error(xhr);
+            }
+        }
+    };
+    xhr.open("GET", path, true);
+    xhr.send();
+}

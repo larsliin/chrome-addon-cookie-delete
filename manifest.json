@@ -1,31 +1,32 @@
 {
-  "name": "Delete Cookies On Exit",
-  "description": "Deletes cookies from current site on exit",
-  "version": "0.1",
-  "manifest_version": 2,
-  "options_ui": {
-    // Required.
-    "page": "options.html",
-    // Recommended.
-    "chrome_style": true,
-    // Not recommended; only provided for backwards compatibility,
-    // and will be unsupported in a future version of Chrome (TBD).
-    "open_in_tab": true
-  },
-  "web_accessible_resources": ["images/icon-settings.png", "images/icon-waste-bin.png", "images/icon-empty-list.png"],
-  "permissions": ["cookies", "storage", "tabs", "notifications", "history","webNavigation", "*://*/*", "<all_urls>"],
-  "background": {
-    "scripts": ["js/background.js"],
-    "persistent": true
-  },
-  "browser_action": {
-    "default_icon" : "images/icon.png",
-    "default_title": "Start Event Page",
-    "default_popup": "popup.html"
-  },
-  "icons": {
-    "128": "images/icon-notification-128.png",
-    "48": "images/icon-notification-48.png",
-    "16":"images/icon-notification-16.png"
-  }
+    "name": "Delete Cookies On Exit",
+    "description": "Deletes cookies from current site on exit",
+    "version": "0.1",
+    "manifest_version": 2,
+    "incognito": "not_allowed",
+    "options_ui": {
+        // Required.
+        "page": "options.html",
+        // Recommended.
+        "chrome_style": true,
+        // Not recommended; only provided for backwards compatibility,
+        // and will be unsupported in a future version of Chrome (TBD).
+        "open_in_tab": true
+    },
+    "web_accessible_resources": ["images/icon-settings.png", "images/icon-waste-bin.png", "images/icon-empty-list.png"],
+    "permissions": ["cookies", "storage", "tabs", "notifications", "history", "*://*/*", "<all_urls>"],
+    "background": {
+        "scripts": ["js/background.js"],
+        "persistent": true
+    },
+    "browser_action": {
+        "default_icon": "images/icon.png",
+        "default_title": "Start Event Page",
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "128": "images/icon-notification-128.png",
+        "48": "images/icon-notification-48.png",
+        "16": "images/icon-notification-16.png"
+    }
 }
