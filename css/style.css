@@ -10,7 +10,8 @@ input[type=button] {
     outline: none;
 }
 
-input[type=button]:active {
+
+input[type=button].cookiedel__sbmt--dflt:active {
     outline: none;
     color: #666;
     padding-top: 1px;
@@ -38,7 +39,6 @@ input[type=button]:active {
 
 .cookiedel__frm--group {
     overflow: hidden;
-    margin: 4px 0;
 }
 
 .cookiedel__txt--wrp {
@@ -78,10 +78,6 @@ input[type="text"].cookiedel__txt--dflt {
     padding: 3px !important;
 }
 
-.cookiedel__stepper {
-    text-align: right;
-}
-
 .cookiedel__sbmt {
     border-radius: 2px;
     float: right;
@@ -104,6 +100,7 @@ hr {
     border-bottom: solid 1px #eee;
     border-left: none;
     border-right: none;
+    margin: 0;
 }
 
 .cookiedel__hstr--active .cookiedel__hstr {
@@ -111,7 +108,13 @@ hr {
 }
 
 .cookiedel__hstr {
-    margin: 15px 0;
+    list-style: none;
+    margin: 20px 0;
+    padding: 0;
+}
+
+.cookiedel__hstr--popup {
+    margin: 5px 0;
 }
 
 .cookiedel__sttngs {
@@ -152,6 +155,45 @@ hr {
     background-image: url('/images/icon-empty-list.png');
 }
 
+
+/*
+Options page
+*/
+
+.cookiedel__frm--optionsgroup:not(:first-child) {
+    padding-left: 20px;
+}
+
+.cookiedel__stepper {
+    text-align: right;
+}
+
+.cookiedel__frm--submit {
+    margin: 20px 0 30px;
+}
+
+.cookiedel__hstr--date {
+    font-size: 10px;
+}
+
+.cookiedel__hstr--item {
+    margin: 5px 0;
+}
+
+
+/*
+helpers
+*/
+
+.clearfix:after {
+    content: " ";
+    /* Older browser do not support empty content */
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
 .hidden {
     display: none;
 }
@@ -164,7 +206,15 @@ hr {
     float: right;
 }
 
+.table {
+    display: table;
+}
 
-/*
-Options page
-*/
+.table-row {
+    display: table-row;
+}
+
+.table-cell {
+    vertical-align: middle;
+    display: table-cell;
+}

@@ -41,10 +41,10 @@ clearListBtn.addEventListener('click', function (e) {
 
 chrome.storage.sync.get('history', function (result) {
     for (var i = result.history.length - 1; i >= 0; i--) {
-        var div = document.createElement('div');
-        div.className = 'cookiedel__frm--group';
-        div.id = 'hstr_' + result.history[i].id;
-        div.innerHTML = '<div>' + result.history[i].domain + '</div>';
-        historyElem.appendChild(div);
+        var li = document.createElement('li');
+        li.className = 'cookiedel__hstr--item';
+        li.id = 'hstr_' + result.history[i].id;
+        li.innerHTML = '<span>' + result.history[i].domain + ' <span class="cookiedel__hstr--date">(<em>' + result.history[i].date_pretty +  ')</em></span></span>';
+        historyElem.appendChild(li);
     }
 });

@@ -133,7 +133,9 @@ function addDomainToHistory(url) {
     // add to plugin history list
     chrome.storage.sync.get('history', function (result) {
         var tmparr = result.history;
-        var obj = { id: id, domain: domainStrippedWWW, origin: url.origin, button_elem: document.getElementById('hstr_sbmt_' + id), text_elem: document.getElementById('hstr_txt_' + id) };
+        var date = new Date();
+        var datePretty = getWeekdayStr(date.getDay()) + ', ' + date.getDate() + nth(date.getDate()) + ' of ' + getMonthStr(date.getMonth()) + ', ' + date.getFullYear() + ', ' + date.getHours() + ':' + date.getMinutes();
+        var obj = { id: id, domain: domainStrippedWWW, origin: url.origin, text_elem: document.getElementById('hstr_txt_' + id), timestamp : date, date_pretty: datePretty };
 
         tmparr.push(obj);
 
@@ -150,12 +152,12 @@ function renderHistoryList(max) {
             var c = 0;
             for (var i = result.history.length - 1; i >= 0; i--) {
                 if (c < max) {
-                    var div = document.createElement('div');
+                    var li = document.createElement('li');
                     var id = result.history[i].id;
-                    div.className = 'cookiedel__frm--group';
-                    div.id = 'hstr_' + id;
-                    div.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" id="hstr_txt_' + id + '" value="' + result.history[i].domain + '" />';
-                    historyElem.appendChild(div);
+                    li.className = 'cookiedel__frm--group';
+                    li.id = 'hstr_' + id;
+                    li.innerHTML = '<input type="text" disabled="disabled" class="cookiedel__txt cookiedel__txt--hstr" id="hstr_txt_' + id + '" value="' + result.history[i].domain + '" />';
+                    historyElem.appendChild(li);
 
                     c++;
                 }
@@ -237,8 +239,6 @@ function notify(title, body) {
 // get browser history object
 function getBrowserHistory(maxdays, callback) {
     var fromDate = (new Date).getTime() - (1000 * 60 * 60 * 24 * maxdays);
-    console.log(maxdays);
-    console.log(fromDate);
     chrome.history.search({ text: '', maxResults: 5000, startTime: fromDate, endTime: (new Date()).getTime() }, function (e) {
         for (var i = 0; i < e.length; i++) {
             var historyItem = e[i];
