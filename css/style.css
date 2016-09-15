@@ -10,7 +10,6 @@ input[type=button] {
     outline: none;
 }
 
-
 input[type=button].cookiedel__sbmt--dflt:active {
     outline: none;
     color: #666;
@@ -118,20 +117,22 @@ hr {
 }
 
 .cookiedel__sttngs {
-    background-color: #eee;
-    padding: 5px 10px;
+    background: #398235;
+    padding: 7px 10px;
     overflow: hidden;
 }
 
 .cookiedel__tool {
     border: none;
     width: 16px;
-    background-size: 15px 15px;
-    background-repeat: no-repeat;
-    background-position: center center;
+    height: 16px;
+    background-size: 150px 150px;
     background-color: transparent;
     box-shadow: none;
     min-width: 0;
+    background-image: url('/images/sprite.png');
+    background-repeat: no-repeat;
+    display: inline-block;
 }
 
 .cookiedel__tool:hover {
@@ -144,15 +145,19 @@ hr {
 }
 
 .cookiedel__sttngs--btn:hover, .cookiedel__sttngs--btn {
-    background-image: url('/images/icon-settings.png');
-}
-
-.cookiedel__trash--btn:hover, .cookiedel__trash--btn {
-    background-image: url('/images/icon-waste-bin.png');
+    background-position: 0 0;
 }
 
 .cookiedel__clr--btn:hover, .cookiedel__clr--btn {
-    background-image: url('/images/icon-empty-list.png');
+    background-position: 0 -50px;
+}
+
+.cookiedel__trash--btn {
+    background-position: 0 -100px;
+}
+
+.cookiedel__trash--btn:hover {
+    background-position: -50px -100px;
 }
 
 
