@@ -1,3 +1,5 @@
+// color
+// https://color.adobe.com/Neutral-Blue-color-theme-22361/
 .cookiedel__body {
     font-family: "BlinkMacSystemFont", "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
     font-size: 12px;
@@ -100,7 +102,11 @@ hr {
     margin: 0;
 }
 
-.cookiedel__hstr--active .cookiedel__hstr {
+.history_list--div {
+    display: none;
+}
+
+.cookiedel__hstr--active .history_list--div {
     display: block;
 }
 
@@ -110,20 +116,32 @@ hr {
     padding: 0;
 }
 
+.cookiedel__hstr--active .cookiedel__hstr {
+    display: block;
+}
+
 .cookiedel__hstr--popup {
     margin: 5px 0;
 }
 
 .cookiedel__sttngs {
-    background: #398235;
-    padding: 7px 10px;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3e606f+0,193441+100 */
+    background: #3e606f;
+    /* Old browsers */
+    background: -moz-linear-gradient(top, #3e606f 0%, #193441 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #3e606f 0%, #193441 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #3e606f 0%, #193441 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    padding: 5px 8px;
     overflow: hidden;
 }
 
 .cookiedel__tool {
     border: none;
-    width: 16px;
-    height: 16px;
+    width: 17px;
+    height: 17px;
     background-size: 150px 150px;
     background-color: transparent;
     box-shadow: none;
@@ -142,20 +160,50 @@ hr {
     margin-right: 10px;
 }
 
-.cookiedel__sttngs--btn:hover, .cookiedel__sttngs--btn {
-    background-position: 0 0;
+.cookiedel__sttngs--btn {
+    background-position: 2px 2px;
+    &:hover {
+        animation: spin 3s linear infinite;
+    }
+}
+// tools settings button mouse over animation
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .cookiedel__clr--btn:hover, .cookiedel__clr--btn {
-    background-position: 0 -50px;
+    background-position: 2px -48px;
 }
 
 .cookiedel__trash--btn {
-    background-position: 0 -100px;
+    background-position: 2px -98px;
 }
 
 .cookiedel__trash--btn:hover {
-    background-position: -50px -100px;
+    background-position: -48px -98px;
 }
 
 

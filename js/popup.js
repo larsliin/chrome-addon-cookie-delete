@@ -17,7 +17,7 @@ submitBtn.addEventListener('click', onRemoveDomainCookies);
 // get settings
 chrome.storage.sync.get('settings', function (result) {
     maxHistoryItems = result.settings.history_length;
-    
+
     if (result.settings.simple) {
         //removeCookies();
         //chrome.browserAction.setPopup({ popup: "" });
@@ -58,6 +58,7 @@ removeAllCookiesBtn.addEventListener('click', function (e) {
 
 // build input autocomplete
 function buildAutoComplete() {
+    // http://complete-ly.appspot.com/
     autocomplete = completely(domainTxtWrp, {});
     autocomplete.setText(currentDomain);
     autocomplete.options = getBrowserHistoryUrlArray(browserHistoryArr);
@@ -67,7 +68,7 @@ function buildAutoComplete() {
     autocomplete.hint.className = 'cookiedel__txt cookiedel__txt--dflt';
     autocomplete.input.id = 'completely_input';
     autocomplete.hint.id = 'completely_hint';
-
+    
     autocomplete.input.addEventListener('focus', function (e) {
         document.addEventListener('keydown', onKeyDown, false);
         if (autocomplete.getText() == currentDomain) {
@@ -110,6 +111,8 @@ function onKeyDown(e) {
 
         autocomplete.input.blur();
     }
+
+    console.log(autocomplete.getText())
 }
 
 // add domain to history
@@ -135,7 +138,7 @@ function addDomainToHistory(url) {
         var tmparr = result.history;
         var date = new Date();
         var datePretty = getWeekdayStr(date.getDay()) + ', ' + date.getDate() + nth(date.getDate()) + ' of ' + getMonthStr(date.getMonth()) + ', ' + date.getFullYear() + ', ' + date.getHours() + ':' + date.getMinutes();
-        var obj = { id: id, domain: domainStrippedWWW, origin: url.origin, text_elem: document.getElementById('hstr_txt_' + id), timestamp : date, date_pretty: datePretty };
+        var obj = { id: id, domain: domainStrippedWWW, origin: url.origin, text_elem: document.getElementById('hstr_txt_' + id), timestamp: date, date_pretty: datePretty };
 
         tmparr.push(obj);
 
