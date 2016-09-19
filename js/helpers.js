@@ -19,7 +19,7 @@ function stripWWW(str) {
 }
 
 function urlToKey(str) {
-    return str.replace(/\./g,'_');
+    return str.replace(/\.|-/g,'_');
 }
 
 // clear history

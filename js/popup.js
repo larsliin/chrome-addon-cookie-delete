@@ -1,3 +1,5 @@
+var headerStr = 'Remove{$} cookie{$} from';
+var headerStrArr = headerStr.split('{$}');
 var deleteCookiesStr = 'Remove';
 var currentDomain = '';
 var maxHistoryItems = 0;
@@ -34,6 +36,7 @@ chrome.storage.sync.get('settings', function (result) {
 chrome.tabs.getSelected(null, function (tab) {
     var url = new URL(tab.url);
     currentDomain = stripWWW(url.hostname);
+    updateHeaderStr(currentDomain);
 });
 
 // settings button clickhandler
@@ -68,20 +71,27 @@ function buildAutoComplete() {
     autocomplete.hint.className = 'cookiedel__txt cookiedel__txt--dflt';
     autocomplete.input.id = 'completely_input';
     autocomplete.hint.id = 'completely_hint';
-    
     autocomplete.input.addEventListener('focus', function (e) {
         document.addEventListener('keydown', onKeyDown, false);
+        document.addEventListener('keyup', onKeyUp, false);
         if (autocomplete.getText() == currentDomain) {
             autocomplete.setText('');
+            updateHeaderStr('');
         }
     });
 
     autocomplete.input.addEventListener('blur', function (e) {
         document.removeEventListener('keydown', onKeyDown);
+        document.removeEventListener('keyup', onKeyUp);
+
         if (autocomplete.getText() == '') {
             autocomplete.setText(currentDomain);
+            updateHeaderStr(currentDomain);
+        } else {
+            autocomplete.setText(autocomplete.hint.value);
         }
     });
+
 }
 
 // remove site specific cookies click handler
@@ -107,12 +117,30 @@ function onRemoveDomainCookies(e) {
 
 function onKeyDown(e) {
     if (e.keyCode == 13) {
-        submitBtn.click();
-
+        
         autocomplete.input.blur();
+        submitBtn.click();
     }
+}
+function onKeyUp(e) {
+    var domainObj = browserHistoryArr[urlToKey(autocomplete.hint.value)];
+    if (typeof domainObj === "undefined"){
+        updateHeaderStr('');
+    }else{
+        updateHeaderStr(domainObj.hostname);
+    }
+}
 
-    console.log(autocomplete.getText())
+function updateHeaderStr(domain) {
+    console.log(domain);
+    chrome.cookies.getAll({ domain: domain }, function (cookies) {
+        var str = headerStrArr[0];
+        str += domain != '' ? ' ' + cookies.length : '';
+        str += headerStrArr[1];
+        str += cookies.length != 1 ? 's' : '';
+        str += headerStrArr[2];
+        document.getElementById('cookiedel_txt_header').innerHTML = str;
+    });
 }
 
 // add domain to history
@@ -179,13 +207,13 @@ function removeCookies(url /* url object */) {
         cookieurl,
         counter = 0;
 
+    console.log(url.hostname);
     // get cookies from domain or all stored cookies
     chrome.cookies.getAll(deleteall ? {} : { domain: url.hostname }, function (cookies) {
         cookiesTotal = cookies.length;
 
         if (cookies.length > 0) {
             for (var i = 0; i < cookies.length; i++) {
-
                 cookieurl = deleteall ? extrapolateUrlFromCookie(cookies[i]) : url.origin + cookies[i].path;
 
                 // reomove cookies
@@ -250,7 +278,7 @@ function getBrowserHistory(maxdays, callback) {
             var date = new Date(historyItem.lastVisitTime);
             var datePretty = getWeekdayStr(date.getDay()) + ', ' + date.getDate() + nth(date.getDate()) + ' of ' + getMonthStr(date.getMonth()) + ', ' + date.getFullYear() + ', ' + date.getHours() + ':' + date.getMinutes();
             var obj = { url: extractDomain(url), host: domain, hostname: domain, origin: getHost(url), last_visit_time: historyItem.lastVisitTime, last_visit_time_pretty: datePretty };
-            var key = domain.replace(/\./g, '_');
+            var key = urlToKey(domain);
 
             browserHistoryArr[key] = obj;
 
